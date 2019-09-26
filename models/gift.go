@@ -1,7 +1,7 @@
 package models
 
 type Gift struct {
-	Id           string `xorm:"not null pk VARCHAR(255)"`
+	Id           int    `xorm:"not null pk autoincr INT(11)"`
 	Title        string `xorm:"not null comment('奖品名称') VARCHAR(255)"`
 	PrizeNum     int    `xorm:"not null default -1 comment('奖品数量，0 无限量，>0限量，<0无奖品') INT(10)"`
 	LeftNum      int    `xorm:"not null default 0 comment('剩余数量') INT(10)"`
@@ -16,7 +16,7 @@ type Gift struct {
 	PrizeData    string `xorm:"comment('发奖计划，[[时间1,数量1],[时间2,数量2]]') TEXT"`
 	PrizeBegin   int    `xorm:"comment('发奖计划周期的开始') INT(13)"`
 	PrizeEnd     int    `xorm:"comment('发奖计划周期的结束') INT(13)"`
-	SysStatus    int    `xorm:"comment('状态，0 正常，1 删除') INT(13)"`
+	SysStatus    int    `xorm:"not null default 0 comment('状态，0 正常，1 删除') INT(13)"`
 	SysCreated   int    `xorm:"comment('创建时间') INT(13)"`
 	SysUpdated   int    `xorm:"comment('修改时间') INT(13)"`
 	SysIp        string `xorm:"comment('操作人IP') VARCHAR(50)"`
