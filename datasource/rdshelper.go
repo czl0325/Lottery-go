@@ -74,5 +74,15 @@ func NewCache() *RedisConn {
 			return err
 		},
 		MaxIdle: 10000,
+		MaxActive: 10000,
+		IdleTimeout: 0,
+		Wait:false,
+		MaxConnLifetime:0,
 	}
+	instance := &RedisConn{
+		pool:      &pool,
+		showDebug: true,
+	}
+	cacheInstance = instance
+	return cacheInstance
 }
