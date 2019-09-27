@@ -61,3 +61,13 @@ func (d *BlackIpDao) Update (data *models.Blackip, columns []string) error {
 	_, err := d.engine.Id(data.Id).MustCols(columns...).Update(data)
 	return err
 }
+
+func (d *BlackIpDao) GetByIp (ip string) *models.Blackip {
+	dataList := make([]models.Blackip, 0)
+	err := d.engine.Where("ip=?",ip).Desc("id").Limit(1).Find(&dataList)
+	if err != nil {
+		return nil
+	} else {
+		return &dataList[0]
+	}
+}
