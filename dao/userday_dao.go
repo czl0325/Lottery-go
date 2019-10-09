@@ -43,6 +43,24 @@ func (d *UserDayDao) CountAll() int64 {
 	}
 }
 
+func (d *UserDayDao) Search (uid, day int) []models.Userday {
+	dataList := make([]models.Userday, 0)
+	err := d.engine.Where("uid=?",uid).Where("day=?",day).Desc("id").Find(&dataList)
+	if err != nil {
+		return nil
+	}
+	return dataList
+}
+
+func (d *UserDayDao) Count (uid, day int) int  {
+	info := &models.Userday{}
+	ok, err := d.engine.Where("uid=?",uid).Where("day=?",day).Get(info)
+	if !ok || err != nil {
+		return 0
+	}
+	return info.Num
+}
+
 func (d *UserDayDao) Create(data* models.Userday) error {
 	_, err := d.engine.Insert(data)
 	return err
