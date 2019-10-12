@@ -3,6 +3,7 @@ package datasource
 import (
 	"Lottery-go/conf"
 	"fmt"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 	"log"
 	"sync"
