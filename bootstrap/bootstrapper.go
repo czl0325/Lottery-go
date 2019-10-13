@@ -94,7 +94,7 @@ func (b* Bootstrapper) setupCron () {
 
 const (
 	// StaticAssets is the root directory for public assets like images, css, js.
-	StaticAssets = "./web/public/"
+	StaticAssets = "./public/"
 	// Favicon is the relative 9to the "StaticAssets") favicon path for our app.
 	Favicon = "favicon.ico"
 )
@@ -106,14 +106,12 @@ func (b* Bootstrapper) Bootstrap() *Bootstrapper  {
 		[]byte("lot-secret-of-characters-big-too"),
 		)
 	b.SetupErrorHandlers()
-	// static files
+
 	b.Favicon(StaticAssets + Favicon)
 	b.HandleDir(StaticAssets[1:len(StaticAssets)-1], StaticAssets)
 
-	// crontab
 	b.setupCron()
 
-	// middleware, after static files
 	b.Use(recover.New())
 	b.Use(logger.New())
 

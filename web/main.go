@@ -6,8 +6,6 @@ import (
 	"Lottery-go/web/routes"
 )
 
-var port = 8080
-
 func newApp() *bootstrap.Bootstrapper  {
 	app := bootstrap.NewApp("抽奖系统","陈昭良")
 	app.Bootstrap()

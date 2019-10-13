@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"Lottery-go/comm"
 	"Lottery-go/models"
 	"Lottery-go/services"
+	"fmt"
 	"github.com/kataras/iris"
 )
 
@@ -35,4 +37,21 @@ func (c *IndexController) GetGifts() map[string]interface{}  {
 	rs["msg"] = ""
 	rs["data"] = list
 	return rs
+}
+
+func (c* IndexController) GetLogin() {
+	uid := comm.Random(10000)
+	loginUser := &models.ObjLoginUser{
+		Uid:      uid,
+		Username: fmt.Sprintf("admin-%d", uid),
+		Now:      comm.NowUnix(),
+		Ip:       comm.ClientIP(c.Ctx.Request()),
+	}
+	comm.SetLoginuser(c.Ctx.ResponseWriter(), loginUser)
+	comm.Redirect(c.Ctx.ResponseWriter(), "/public/index?from=loginIn")
+}
+
+func (c* IndexController) GetLoginOut() {
+	comm.SetLoginuser(c.Ctx.ResponseWriter(), nil)
+	comm.Redirect(c.Ctx.ResponseWriter(), "/public/index?from=loginOut")
 }

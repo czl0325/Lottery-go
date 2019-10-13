@@ -1,10 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>抽奖系统</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <link href="/public/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="data:text/css;charset=utf-8," data-href="/public/dist/css/bootstrap-theme.min.css" rel="stylesheet" id="bs-theme-stylesheet">
+    <title>Go抽奖系统前端页面</title>
 </head>
 <body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapse" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/public/index.html">Go抽奖系统</a>
+            </div>
 
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul id="nav_login" class="nav navbar-nav">
+                    <li><a href="/login">登录</a></li>
+                </ul>
+                <ul id="nav_logout" class="nav navbar-nav">
+                    <li><a href="/myprize">我的中奖纪录</a></li>
+                    <li><a href="/logout">退出</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="http://www.imooc.com/" target="_blank">慕课网</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">更多 <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    我是大转盘
+    <br/>
+    <br/>
+    <a href="/public/lucky.html" class="btn btn-default">开始抽奖</a>
+    <a href="/gifts" class="btn btn-default">奖品列表</a>
+    <a href="/newprize" class="btn btn-default">中奖列表</a>
+    <div>
+        <hr/>
+        <footer style="text-align: center;">
+            <p>@2019 - Go抽奖系统</p>
+        </footer>
+    </div>
+
+
+    <script src="/public/dist/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="/public/dist/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="/public/dist/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="/public/dist/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        console.log("index.html")
+        var uid = 0
+        var username = ""
+        var login = $.cookie("lottery_loginuser")
+        if (login && login.length > 0) {
+            var datas = login.split("=")
+            for (var i=0; i<datas.length; i++) {
+                var data = datas[i].split("=")
+                if (data[0] == "uid") {
+                    uid = data[1] - 0
+                } else if (data[0] == "username") {
+                    username = data[1]
+                }
+                console.log(uid + " " + username)
+            }
+        }
+        if (uid > 0) {
+            $("#nav_login").hide()
+        } else {
+            $("#nav_logout").hide()
+        }
+    </script>
 </body>
 </html>
+

@@ -15,12 +15,21 @@ func Configure(b* bootstrap.Bootstrapper)  {
 	userDayService := services.NewUserdayService()
 	blackIpService := services.NewBlackIpService()
 
-	rpc := mvc.New(b.Party("/"))
-	rpc.Register(userService,
+	index := mvc.New(b.Party("/"))
+	index.Register(userService,
 		giftService,
 		codeService,
 		resultService,
 		userDayService,
 		blackIpService)
-	rpc.Handle(new(controllers.IndexController))
+	index.Handle(new(controllers.IndexController))
+
+	admin := mvc.New(b.Party("/admin"))
+	admin.Register(userService,
+		giftService,
+		codeService,
+		resultService,
+		userDayService,
+		blackIpService)
+	admin.Handle(new(controllers.AdminController))
 }
