@@ -21,7 +21,7 @@ func (c *AdminController) Get() mvc.Result {
 		Name:"admin/index.html",
 		Data:iris.Map{
 			"Title": "陈昭良",
-			"Channel":"",
+			"Channel":"gift",
 		},
 		Layout:"admin/layout.html",
 	}

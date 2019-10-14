@@ -32,4 +32,8 @@ func Configure(b* bootstrap.Bootstrapper)  {
 		userDayService,
 		blackIpService)
 	admin.Handle(new(controllers.AdminController))
+
+	adminGift := mvc.New(b.Party("/admin/gift"))
+	adminGift.Register(giftService)
+	adminGift.Handle(new(controllers.AdminGiftController))
 }
