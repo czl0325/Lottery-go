@@ -3,6 +3,7 @@ package datasource
 import (
 	"Lottery-go/conf"
 	"fmt"
+	"github.com/daviddengcn/go-colortext"
 	"github.com/gomodule/redigo/redis"
 	"log"
 	"sync"
@@ -32,7 +33,9 @@ func (rds *RedisConn) Do (commandName string, args ...interface{}) (reply interf
 	}
 	t2 := time.Now().UnixNano()
 	if rds.showDebug {
+		ct.Foreground(ct.Cyan, true)
 		fmt.Printf("[redis] [info] [%dus]cmd=%s, err=%s, args=%v, reply=%s\n", (t2-t1)/1000, commandName, err, args, reply)
+		ct.ResetColor()
 	}
 	return reply, err
 }

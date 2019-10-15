@@ -1,0 +1,79 @@
+<div class="container-fluid">
+    <div class="panel panel-default" style="margin-bottom: 0px;">
+        <div class="panel-heading" style="margin-bottom: 12px;">
+            <a href="/admin/gift">返回</a>
+            {{if gt .info.Id 0}}编辑{{else}}添加{{end}}奖品信息
+        </div>
+
+        <form class="form-horizontal" action="/admin/gift/save" method="post">
+            <div class="form-group" style="height: 30px;">
+                <label for="input_title" class="col-sm-2 control-label">奖品名称</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="input_title" name="title" value="{{.info.Title}}">
+                </div>
+            </div>
+            <div class="form-group" style="height:30px;">
+                <label for="input_prize_num" class="col-sm-2 control-label">奖品数</label>
+                <div class="col-sm-9">
+                    <input type="number" class="form-control" id="input_prize_num" name="prize_num" value="{{.info.PrizeNum}}">
+                </div>
+            </div>
+            <div class="form-group" style="height:30px;">
+                <label for="input_prize_code" class="col-sm-2 control-label" title="0-9999，左右全包含关系，最小概率是万分之一，如：0-0。最大是百分之百，如:0-9999">中奖概率(?)</label>
+                <div class="col-sm-9">
+                    <input placeholder="数字区间，如：0-9999" type="text" class="form-control" id="input_prize_code" name="prize_code" value="{{.info.PrizeCode}}">
+                </div>
+            </div>
+            <div class="form-group" style="height:30px;">
+                <label for="input_prize_time" class="col-sm-2 control-label">中奖周期（D天）</label>
+                <div class="col-sm-9">
+                    <input type="number" class="form-control" id="input_prize_time" name="prize_time" value="{{.info.PrizeTime}}">
+                </div>
+            </div>
+            <div class="form-group" style="height:30px;">
+                <label for="input_img" class="col-sm-2 control-label">奖品图片</label>
+                <div class="col-sm-9">
+                    <input type="file" accept="image/*" class="form-control" id="input_img" name="img" value="{{.info.Img}}">
+                </div>
+            </div>
+            <div class="form-group" style="height:30px;">
+                <label for="input_displayOrder" class="col-sm-2 control-label">位置排序</label>
+                <div class="col-sm-9">
+                    <input placeholder="数字0-9" type="number" class="form-control" id="input_displayOrder" name="displayOrder" value="{{.info.DisplayOrder}}">
+                </div>
+            </div>
+            <div class="form-group" style="height:30px;">
+                <label for="input_gtype" class="col-sm-2 control-label" title="0 虚拟，1 相同券，2 不同券，3 实物小奖，4 实物大奖">类型(?)</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="input_gtype" name="gtype" value="{{.info.Gtype}}">
+                </div>
+            </div>
+            <div class="form-group" style="height:30px;">
+                <label for="input_gdata" class="col-sm-2 control-label">扩展数据</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="input_gdata" name="gdata" value="{{.info.Gdata}}">
+                </div>
+            </div>
+            <div class="form-group" style="height:30px;">
+                <label for="input_time_begin" class="col-sm-2 control-label">开始时间</label>
+                <div class="col-sm-9">
+                    <input placeholder="格式：YYYY-MM-DD hh:mm:ss" type="text" class="form-control" id="input_time_begin" name="time_begin" value="{{.info.TimeBegin}}">
+                </div>
+            </div>
+            <div class="form-group" style="height:30px;">
+                <label for="input_time_end" class="col-sm-2 control-label">结束时间</label>
+                <div class="col-sm-9">
+                    <input placeholder="格式：YYYY-MM-DD hh:mm:ss" type="text" class="form-control" id="input_time_end" name="time_end" value="{{.info.TimeEnd}}">
+                </div>
+            </div>
+
+            <div class="form-group" style="height:30px;">
+                <div class="col-sm-offset-2 col-sm-9">
+                    <button type="submit" class="btn btn-default">保存</button>
+                    <input type="reset" class="btn btn-default" value="重置" />
+                    <input type="hidden" class="form-control" id="input_id" name="id" value="{{.info.Id}}">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -21,4 +21,38 @@
             <th>管理</th>
         </tr>
     </thead>
+    <tbody>
+        {{range $i, $data := .DataList}}
+            <tr {{if .eq $data.SysStatus 0}} class="success" {{end}}>
+                <td>{{$data.DisplayOrder}}</td>
+                <th scope="row">{{$data.Id}}</th>
+                <td><a href="/admin/result?gift_id={{.Id}}">{{$data.Title}}</a></td>
+                <td>{{$data.PrizeNum}} / {{.LeftNum}}</td>
+                <td>{{$data.PrizeCode}}</td>
+                <td title="{{FromUnixtime .PrizeBegin}} - {{FromUnixtime .PrizeEnd}}">
+                    <a href="#" data-toggle="model" data-target="#myModal" onclick="showSharedGiftInfo('{{FromUnixtime .PrizeBegin}}', '{{FromUnixtime .PrizeEnd}}', '{{.PrizeData}}');return false;">
+                        {{$data.PrizeTime}}天计划
+                    </a>
+                </td>
+                <td><img src="{{$data.Img}}" width="50"></td>
+                <td>{{$data.Gtype}}</td>
+                <td>{{$data.Gdata}}</td>
+                <td>{{FromUnixtime $data.TimeBegin}}</td>
+                <td>{{FromUnixtime $data.TimeEnd}}</td>
+                <td>{{FromUnixtime $data.SysUpdated}}</td>
+                <td>
+                    <a href="/admin/gift/edit?id={{.Id}}">修改</a>
+                    {{if eq $data.SysStatus 0}}
+                        <a href="/admin/gift/delete?id={{.Id}}">删除</a>
+                    {{else}}
+                        <a href="/admin/gift/reset?id={{.Id}}">恢复</a>
+                    {{end}}
+                    {{if eq .Gtype 2}}
+                        <br/>
+                        <a href="/admin/code?gift_id={{.Id}}">优惠券管理</a>
+                    {{end}}
+                </td>
+            </tr>
+        {{end}}
+    </tbody>
 </table>
