@@ -91,6 +91,17 @@ func (c *AdminGiftController) GetEdit() mvc.Result {
 	}
 }
 
+func (c* AdminGiftController) GetResult() mvc.Result {
+	return mvc.View{
+		Name: "admin/result.html",
+		Data: iris.Map{
+			"Title" : "奖品编辑",
+			"Channel" : "gift",
+		},
+		Layout: "admin/layout.html",
+	}
+}
+
 func (c* AdminGiftController) PostSave() mvc.Result {
 	data := viewmodels.ViewGift{}
 	err := c.Ctx.ReadForm(&data)
@@ -139,15 +150,16 @@ func (c* AdminGiftController) PostSave() mvc.Result {
 				// 发奖周期发生了变化
 				utils.ResetGiftPrizeData(&gift, c.ServiceGift)
 			}
-			c.ServiceGift.Update(&gift, []string{"title", "prize_num", "left_num", "prize_code", "prize_time", "img", "displayorder", "gtype", "gdata", "time_begin", "time_end", "sys_updated"})
+			c.ServiceGift.Update(&gift, []string{"title", "prize_num", "left_num", "prize_code", "prize_time", "img", "display_order", "gtype", "gdata", "time_begin", "time_end", "sys_updated"})
 		} else {
 			gift.Id = 0
 		}
 	}
-	if gift.Id > 0 {
+	if gift.Id == 0 {
 		gift.LeftNum = gift.PrizeNum
 		gift.SysIp = comm.ClientIP(c.Ctx.Request())
-		gift.SysCreated =  int(time.Now().Unix())
+		gift.SysCreated = int(time.Now().Unix())
+		gift.SysUpdated = int(time.Now().Unix())
 		c.ServiceGift.Create(&gift)
 		// 更新奖品的发奖计划
 		utils.ResetGiftPrizeData(&gift, c.ServiceGift)

@@ -20,7 +20,7 @@ func NewGiftDao(engine *xorm.Engine) *GiftDao {
 func (d *GiftDao) Get (id int) *models.Gift {
 	data := &models.Gift{Id: id}
 	ok, err := d.engine.Get(data)
-	if ok && err != nil {
+	if ok && err == nil {
 		return data
 	} else {
 		data.Id = 0

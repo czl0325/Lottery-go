@@ -33,7 +33,7 @@ func Configure(b* bootstrap.Bootstrapper)  {
 		blackIpService)
 	admin.Handle(new(controllers.AdminController))
 
-	adminGift := mvc.New(b.Party("/admin/gift"))
+	adminGift := admin.Party("/gift")
 	adminGift.Register(giftService)
 	adminGift.Handle(new(controllers.AdminGiftController))
 }

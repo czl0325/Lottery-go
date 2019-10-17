@@ -1,0 +1,25 @@
+<div class="panel-heading">
+    (总共 {{.Total}}条记录)
+    {{if ne .PagePrev ""}}
+        <a href="/admin/result?gift_id={{.GiftId}}&uid={{.Uid}}&page={{.PagePrev}}">上一页</a>
+    {{end}}
+    {{if ne .PageNext ""}}
+        <a href="/admin/result?gift_id={{.GiftId}}&uid={{.Uid}}&page={{.PageNext}}">下一页</a>
+    {{end}}
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>奖品名称</th>
+            <th>奖品类型</th>
+            <th>用户</th>
+            <th>抽奖编码</th>
+            <th>获奖信息</th>
+            <th>IP地址</th>
+            <th>创建时间</th>
+            <th>管理</th>
+        </tr>
+    </thead>
+</table>

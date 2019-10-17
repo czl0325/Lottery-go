@@ -33,7 +33,7 @@
             <div class="form-group" style="height:30px;">
                 <label for="input_img" class="col-sm-2 control-label">奖品图片</label>
                 <div class="col-sm-9">
-                    <input type="file" accept="image/*" class="form-control" id="input_img" name="img" value="{{.info.Img}}">
+                    <input type="text" class="form-control" id="input_img" name="img" value="{{.info.Img}}">
                 </div>
             </div>
             <div class="form-group" style="height:30px;">
@@ -57,16 +57,15 @@
             <div class="form-group" style="height:30px;">
                 <label for="input_time_begin" class="col-sm-2 control-label">开始时间</label>
                 <div class="col-sm-9">
-                    <input placeholder="格式：YYYY-MM-DD hh:mm:ss" type="text" class="form-control" id="input_time_begin" name="time_begin" value="{{.info.TimeBegin}}">
+                    <input type="text" placeholder="格式：YYYY-MM-DD hh:mm:ss" class="form-control" id="input_time_begin" name="time_begin" value="{{.info.TimeBegin}}">
                 </div>
             </div>
             <div class="form-group" style="height:30px;">
                 <label for="input_time_end" class="col-sm-2 control-label">结束时间</label>
                 <div class="col-sm-9">
-                    <input placeholder="格式：YYYY-MM-DD hh:mm:ss" type="text" class="form-control" id="input_time_end" name="time_end" value="{{.info.TimeEnd}}">
+                    <input type="text" placeholder="格式：YYYY-MM-DD hh:mm:ss"  class="form-control" id="input_time_end" name="time_end" value="{{.info.TimeEnd}}">
                 </div>
             </div>
-
             <div class="form-group" style="height:30px;">
                 <div class="col-sm-offset-2 col-sm-9">
                     <button type="submit" class="btn btn-default">保存</button>
