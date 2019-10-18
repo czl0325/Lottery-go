@@ -19,8 +19,8 @@ type AdminGiftController struct {
 	ServiceGift    	services.GiftService
 	ServiceCode    	services.CodeService
 	ServiceResult  	services.ResultService
-	ServiceUserday 	services.UserdayService
-	ServiceBlackip 	services.BlackIpService
+	ServiceUserDay 	services.UserdayService
+	ServiceBlackIp 	services.BlackIpService
 }
 
 func (c *AdminGiftController) Get() mvc.Result {
@@ -86,17 +86,6 @@ func (c *AdminGiftController) GetEdit() mvc.Result {
 			"Title" : "奖品编辑",
 			"Channel" : "gift",
 			"info" : gift,
-		},
-		Layout: "admin/layout.html",
-	}
-}
-
-func (c* AdminGiftController) GetResult() mvc.Result {
-	return mvc.View{
-		Name: "admin/result.html",
-		Data: iris.Map{
-			"Title" : "奖品编辑",
-			"Channel" : "gift",
 		},
 		Layout: "admin/layout.html",
 	}

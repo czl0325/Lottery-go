@@ -22,4 +22,48 @@
             <th>管理</th>
         </tr>
     </thead>
+    <tbody>
+        {{range $i, $data := .DataList}}
+            <tr {{if eq $data.SysStatus 2}} class="success" {{end}}>
+                <th scope="row">{{.Id}}</th>
+                <td><a href="/admin/result?gift_id={{.GiftId}}">{{$data.GiftName}}</a></td>
+                <td>{{$data.GiftType}}</td>
+                <td><a href="/admin/result?uid={{.Uid}}">{{$data.UserName}}</a></td>
+                <td>{{$data.PrizeCode}}</td>
+                <td>{{$data.GiftData}}</td>
+                <td>{{$data.SysIp}}</td>
+                <td>{{FromUnixtime $data.SysCreated}}</td>
+                <td>
+                    {{if eq $data.SysStatus 0}}
+                        <a href="/admin/result/delete?id={{.Id}}">删除</a>
+                        <a href="/admin/result/cheat?id={{.Id}}">作弊</a>
+                    {{else if eq $data.SysStatus 1}}
+                        <a href="/admin/result/reset?id={{.Id}}">恢复</a>
+                    {{else}}
+                        作弊
+                    {{end}}
+                </td>
+            </tr>
+        {{end}}
+    </tbody>
 </table>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="/admin/result/import?gift_id={{.GiftId}}" method="post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">导入优惠券</h4>
+                </div>
+                <div class="modal-body">
+                    <textarea name="results" style="height: 300px; width: 100%;" placeholder="每行一个券"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="submit" class="btn btn-primary">导入</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

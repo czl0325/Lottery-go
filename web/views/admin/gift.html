@@ -26,7 +26,7 @@
         <tr {{if eq $data.SysStatus 0}} class="success" {{end}}>
             <td>{{$data.DisplayOrder}}</td>
             <th scope="row">{{$data.Id}}</th>
-            <td><a href="/admin/gift/result?gift_id={{.Id}}">{{$data.Title}}</a></td>
+            <td><a href="/admin/result?gift_id={{.Id}}">{{$data.Title}}</a></td>
             <td>{{$data.PrizeNum}} / {{.LeftNum}}</td>
             <td>{{$data.PrizeCode}}</td>
             <td title="{{FromUnixtime .PrizeBegin}} - {{FromUnixtime .PrizeEnd}}">
