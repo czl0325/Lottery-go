@@ -1,0 +1,44 @@
+<div class="panel-heading">
+    总共 {{.Total}} 个用户
+    {{if ne .PagePrev ""}}<a href="/admin/user?page={{.PagePrev}}">上一页</a>{{end}}
+    {{if ne .PageNext ""}}<a href="/admin/user?page={{.PageNext}}">下一页</a>{{end}}
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>用户名</th>
+            <th>黑名单到期时间</th>
+            <th>联系人</th>
+            <th>手机</th>
+            <th>地址</th>
+            <th>创建时间</th>
+            <th>更新时间</th>
+            <th>管理</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{range $i, $data := .DataList}}
+        <tr {{if gt $data.BlackTime $.Now}} class="warning" {{end}}>
+            <th scope="row">{{.Id}}</th>
+            <td>{{$data.UserName}}</td>
+            <td>{{FromUnixtime $data.BlackTime}}</td>
+            <td>{{$data.RealName}}</td>
+            <td>{{$data.Mobile}}</td>
+            <td>{{$data.Address}}</td>
+            <td>{{FromUnixtime $data.SysCreated}}</td>
+            <td>{{FromUnixtime $data.SysUpdated}}</td>
+            <td>
+                <a href="/admin/user/black?id={{.Id}}&time=7">黑一周</a>
+                <br/>
+                <a href="/admin/user/black?id={{.Id}}&time=30">黑一月</a>
+                <br/>
+                <a href="/admin/user/black?id={{.Id}}&time=365">黑一年</a>
+                <br/>
+                <a href="/admin/user/black?id={{.Id}}&time=0">洗白</a>
+            </td>
+        </tr>
+        {{end}}
+    </tbody>
+</table>

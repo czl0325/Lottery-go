@@ -1,0 +1,45 @@
+<div class="container-fluid">
+    <div class="panel-heading">
+        <a href="/admin/user">返回</a>
+        添加用户
+    </div>
+    <form class="form-horizontal" action="/admin/user/save" method="post">
+        <div class="form-group" style="height:30px;">
+            <label for="input_username" class="col-sm-2 control-label">用户名</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="input_username" name="user_name" value="{{.info.UserName}}">
+            </div>
+        </div>
+        <div class="form-group" style="height:30px;">
+            <label for="input_black_time" class="col-sm-2 control-label">黑名单到期时间</label>
+            <div class="col-sm-9">
+                <input type="text" placeholder="格式：YYYY-MM-DD hh:mm:ss" class="form-control" id="input_black_time" name="black_time" value="{{.info.BlackTime}}">
+            </div>
+        </div>
+        <div class="form-group" style="height:30px;">
+            <label for="input_real_name" class="col-sm-2 control-label">真实星星</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="input_real_name" name="real_name" value="{{.info.RealName}}">
+            </div>
+        </div>
+        <div class="form-group" style="height:30px;">
+            <label for="input_mobile" class="col-sm-2 control-label">电话号码</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="input_mobile" name="mobile" value="{{.info.Mobile}}">
+            </div>
+        </div>
+        <div class="form-group" style="height:30px;">
+            <label for="input_address" class="col-sm-2 control-label">地址</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="input_address" name="address" value="{{.info.Address}}">
+            </div>
+        </div>
+        <div class="form-group" style="height:30px;">
+            <div class="col-sm-offset-2 col-sm-9">
+                <button type="submit" class="btn btn-default">保存</button>
+                <input type="reset" class="btn btn-default" value="重置" />
+                <input type="hidden" class="form-control" id="input_id" name="id" value="{{.info.Id}}">
+            </div>
+        </div>
+    </form>
+</div>
