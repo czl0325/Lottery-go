@@ -1,3 +1,43 @@
 <div class="panel-heading">
-
+    {{if gt .GiftId 0}}
+    <a href="javascript:void(0)" data-toggle="modal" data-target="#myModal" style="height:18px; padding:6px;">导入奖品{{.GiftId}}的优惠券</a>
+    <a href="/admin/code/recache?id={{.GiftId}}" title="(有效编码数/缓存编码数)">重整缓存中券的编码({{.CodeNum}}/{{.CacheNum}})</a>
+    {{end}}
+    (总共{{.Total}}张优惠券）
+    {{if ne .PagePrev ""}}<a href="/admin/code?gift_id={{.GiftId}}&page={{.PagePrev}}">上一页</a>{{end}}
+    {{if ne .PageNext ""}}<a href="/admin/code?gift_id={{.GiftId}}&page={{.PageNext}}">下一页</a>{{end}}
 </div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>奖品ID</th>
+        <th>优惠券</th>
+        <th>创建时间</th>
+        <th>更新时间</th>
+        <th>管理</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {{range $i, $data := .DataList}}
+        <tr {{if eq $data.SysStatus 2}} class="warning" {{end}}>
+            <th scope="row">{{.Id}}</th>
+            <th><a href="/admin/code?gift_id={{.GiftId}}">{{.GiftId}}</a></th>
+            <th>{{.Code}}</th>
+            <td>{{FromUnixtime $data.SysCreated}}</td>
+            <td>{{FromUnixtime $data.SysUpdated}}</td>
+            <td>
+                {{if eq $data.SysStatus 0}}
+                    <a href="/admin/code/delete?id={{.Id}}">删除</a>
+                {{else if eq $data.SysStatus 1}}
+                    <a href="/admin/code/reset?id={{.Id}}">恢复</a>
+                {{else}}
+                    已发放
+                {{end}}
+            </td>
+        </tr>
+    {{end}}
+    </tbody>
+</table>

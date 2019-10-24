@@ -44,4 +44,8 @@ func Configure(b* bootstrap.Bootstrapper)  {
 	adminUser := admin.Party("/user")
 	adminUser.Register(userService)
 	adminUser.Handle(new(controllers.AdminUserController))
+
+	adminCode := admin.Party("/code")
+	adminCode.Register(codeService)
+	adminCode.Handle(new(controllers.AdminCodeController))
 }
