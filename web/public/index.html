@@ -64,12 +64,11 @@
     <script src="/public/dist/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <script src="/public/dist/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script>
-        console.log("index.html")
         var uid = 0
         var username = ""
-        var login = $.cookie("lottery_loginuser")
+        var login = $.cookie("lottery_loginUser")
         if (login && login.length > 0) {
-            var datas = login.split("=")
+            var datas = login.split("&")
             for (var i=0; i<datas.length; i++) {
                 var data = datas[i].split("=")
                 if (data[0] == "uid") {

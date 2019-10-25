@@ -58,9 +58,9 @@ func GetLoginUser(request *http.Request) *models.ObjLoginUser {
 		log.Println("fuc_web GetLoginUser Unmarshal ", err)
 		return nil
 	}
-	sign := createLoginuserSign(loginUser)
+	sign := createLoginUserSign(loginUser)
 	if sign != loginUser.Sign {
-		log.Println("fuc_web GetLoginUser createLoginuserSign not sign", sign, loginUser.Sign)
+		log.Println("签名校验失败！", sign, loginUser.Sign)
 		return nil
 	}
 
@@ -68,8 +68,8 @@ func GetLoginUser(request *http.Request) *models.ObjLoginUser {
 }
 
 // 将登录的用户信息设置到cookie中
-func SetLoginuser(writer http.ResponseWriter, loginuser *models.ObjLoginUser) {
-	if loginuser == nil || loginuser.Uid < 1 {
+func SetLoginUser(writer http.ResponseWriter, loginUser *models.ObjLoginUser) {
+	if loginUser == nil || loginUser.Uid < 1 {
 		c := &http.Cookie{
 			Name:   "lottery_loginUser",
 			Value:  "",
@@ -79,15 +79,15 @@ func SetLoginuser(writer http.ResponseWriter, loginuser *models.ObjLoginUser) {
 		http.SetCookie(writer, c)
 		return
 	}
-	if loginuser.Sign == "" {
-		loginuser.Sign = createLoginuserSign(loginuser)
+	if loginUser.Sign == "" {
+		loginUser.Sign = createLoginUserSign(loginUser)
 	}
 	params := url.Values{}
-	params.Add("uid", strconv.Itoa(loginuser.Uid))
-	params.Add("username", loginuser.Username)
-	params.Add("now", strconv.Itoa(loginuser.Now))
-	params.Add("ip", loginuser.Ip)
-	params.Add("sign", loginuser.Sign)
+	params.Add("uid", strconv.Itoa(loginUser.Uid))
+	params.Add("username", loginUser.Username)
+	params.Add("now", strconv.Itoa(loginUser.Now))
+	params.Add("ip", loginUser.Ip)
+	params.Add("sign", loginUser.Sign)
 	c := &http.Cookie{
 		Name:  "lottery_loginUser",
 		Value: params.Encode(),
@@ -97,7 +97,7 @@ func SetLoginuser(writer http.ResponseWriter, loginuser *models.ObjLoginUser) {
 }
 
 // 根据登录用户信息生成加密字符串
-func createLoginuserSign(loginUser *models.ObjLoginUser) string {
+func createLoginUserSign(loginUser *models.ObjLoginUser) string {
 	str := fmt.Sprintf("uid=%d&username=%s&secret=%s", loginUser.Uid, loginUser.Username, conf.CookieSecret)
 	return CreateSign(str)
 }

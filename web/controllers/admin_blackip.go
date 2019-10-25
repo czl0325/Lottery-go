@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"Lottery-go/comm"
+	"Lottery-go/models"
 	"Lottery-go/services"
 	"fmt"
 	"github.com/kataras/iris"
@@ -37,5 +39,18 @@ func (c *AdminBlackIpController) Get() mvc.Result {
 			"PageNext": pageNext,
 		},
 		Layout: "admin/layout.html",
+	}
+}
+
+func (c *AdminBlackIpController) GetBlack() mvc.Result {
+	id, err := c.Ctx.URLParamInt("id")
+	t := c.Ctx.URLParamIntDefault("time", 0)
+	if err == nil {
+		t = comm.NowUnix() + t*86400
+		c.ServiceBlackIp.Update(&models.Blackip{Id: id, BlackTime: t, SysUpdated: comm.NowUnix()},
+			[]string{"black_time", "sys_updated"})
+	}
+	return mvc.Response{
+		Path: "/admin/blackip.html",
 	}
 }

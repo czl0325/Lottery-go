@@ -7,7 +7,7 @@ import (
 	"github.com/kataras/iris/mvc"
 )
 
-func Configure(b* bootstrap.Bootstrapper)  {
+func Configure(b *bootstrap.Bootstrapper) {
 	userService := services.NewUserService()
 	giftService := services.NewGiftService()
 	codeService := services.NewCodeService()
@@ -48,4 +48,8 @@ func Configure(b* bootstrap.Bootstrapper)  {
 	adminCode := admin.Party("/code")
 	adminCode.Register(codeService)
 	adminCode.Handle(new(controllers.AdminCodeController))
+
+	adminBlackIp := admin.Party("/blackip")
+	adminBlackIp.Register(blackIpService)
+	adminBlackIp.Handle(new(controllers.AdminBlackIpController))
 }

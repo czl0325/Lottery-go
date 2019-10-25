@@ -1,3 +1,40 @@
 <div class="panel-heading">
-
+    总共 {{.Total}} 条记录
+    {{if ne .PagePrev ""}}<a href="/admin/blackip?page={{.PagePrev}}">上一页</a>{{end}}
+    {{if ne .PageNext ""}}<a href="/admin/blackip?page={{.PageNext}}">下一页</a>{{end}}
 </div>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>IP</th>
+        <th>黑名单到期时间</th>
+        <th>创建时间</th>
+        <th>更新时间</th>
+        <th>管理</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{range $i, $data := .Datalist}}
+
+        <tr {{if gt $data.Blacktime $.Now}}class="warning"{{end}}>
+            <th scope="row">{{.Id}}</th>
+            <td>{{$data.Ip}}</td>
+            <td>{{FromUnixtime $data.Blacktime}}</td>
+            <td>{{FromUnixtime $data.SysCreated}}</td>
+            <td>{{FromUnixtime $data.SysUpdated}}</td>
+            <td>
+                <a href="/admin/blackip/black?id={{.Id}}&time=7">黑一周</a>
+                &nbsp;
+                <a href="/admin/blackip/black?id={{.Id}}&time=30">黑一月</a>
+                <br/>
+                <a href="/admin/blackip/black?id={{.Id}}&time=365">黑一年</a>
+                &nbsp;
+                <a href="/admin/blackip/black?id={{.Id}}&time=0">洗白</a>
+            </td>
+        </tr>
+
+    {{end}}
+    </tbody>
+</table>
