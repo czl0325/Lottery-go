@@ -7,23 +7,23 @@ package utils
 import (
 	"Lottery-go/datasource"
 	"fmt"
-	)
+)
 
 // 加锁，抽奖的时候需要用到的锁，避免一个用户并发多次抽奖
 func LockLucky(uid int) bool {
-		return lockLuckyServ(uid)
+	return lockLuckyServer(uid)
 }
 
 // 解锁，抽奖的时候需要用到的锁，避免一个用户并发多次抽奖
 func UnlockLucky(uid int) bool {
-		return unlockLuckyServ(uid)
+	return unlockLuckyServer(uid)
 }
 
 func getLuckyLockKey(uid int) string {
 	return fmt.Sprintf("lucky_lock_%d", uid)
 }
 
-func lockLuckyServ(uid int) bool {
+func lockLuckyServer(uid int) bool {
 	key := getLuckyLockKey(uid)
 	cacheObj := datasource.InstanceCache()
 	rs, _ := cacheObj.Do("SET", key, 1, "EX", 3, "NX")
@@ -34,7 +34,7 @@ func lockLuckyServ(uid int) bool {
 	}
 }
 
-func unlockLuckyServ(uid int) bool {
+func unlockLuckyServer(uid int) bool {
 	key := getLuckyLockKey(uid)
 	cacheObj := datasource.InstanceCache()
 	rs, _ := cacheObj.Do("DEL", key)
@@ -44,4 +44,3 @@ func unlockLuckyServ(uid int) bool {
 		return false
 	}
 }
-

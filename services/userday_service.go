@@ -13,8 +13,6 @@ type userdayService struct {
 	dao *dao.UserDayDao
 }
 
-
-
 type UserdayService interface {
 	GetAll(page, size int) []models.Userday
 	CountAll() int64
@@ -26,8 +24,10 @@ type UserdayService interface {
 	GetUserToday(uid int) *models.Userday
 }
 
-func NewUserdayService() UserdayService  {
-	return &userdayService{dao:dao.NewUserDayDao(datasource.InstanceDbMaster()),}
+func NewUserdayService() UserdayService {
+	return &userdayService{
+		dao: dao.NewUserDayDao(datasource.InstanceDbMaster()),
+	}
 }
 
 func (u userdayService) GetAll(page, size int) []models.Userday {
@@ -69,4 +69,3 @@ func (u userdayService) GetUserToday(uid int) *models.Userday {
 		return nil
 	}
 }
-

@@ -9,8 +9,7 @@ import (
 	"fmt"
 	"log"
 	"math"
-			"time"
-
+	"time"
 )
 
 const userFrameSize = 2
@@ -26,13 +25,13 @@ func init() {
 
 // 集群模式，重置用户今天次数
 func resetGroupUserList() {
-	log.Println("user_day_lucky.resetGroupUserList start")
+	log.Println("重置用户今天次数 开始")
 	cacheObj := datasource.InstanceCache()
 	for i := 0; i < userFrameSize; i++ {
 		key := fmt.Sprintf("day_users_%d", i)
 		cacheObj.Do("DEL", key)
 	}
-	log.Println("user_day_lucky.resetGroupUserList stop")
+	log.Println("重置用户今天次数 结束")
 	// IP当天的统计数，整点归零，设置定时器
 	duration := comm.NextDayDuration()
 	time.AfterFunc(duration, resetGroupUserList)
