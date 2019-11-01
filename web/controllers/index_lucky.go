@@ -13,6 +13,12 @@ func (c *IndexController) GetLucky() map[string]interface{} {
 		rs["msg"] = "请先登录，再来抽奖"
 		return rs
 	}
-	//ip := comm.ClientIP(c.Ctx.Request())
+
+	ip := comm.ClientIP(c.Ctx.Request())
+	api := &LuckyApi{}
+	code, msg, gift := api.luckyDo(loginUser.Uid, loginUser.Username, ip)
+	rs["code"] = code
+	rs["msg"] = msg
+	rs["data"] = gift
 	return rs
 }

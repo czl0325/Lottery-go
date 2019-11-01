@@ -13,11 +13,11 @@ type GiftDao struct {
 
 func NewGiftDao(engine *xorm.Engine) *GiftDao {
 	return &GiftDao{
-		engine:engine,
+		engine: engine,
 	}
 }
 
-func (d *GiftDao) Get (id int) *models.Gift {
+func (d *GiftDao) Get(id int) *models.Gift {
 	data := &models.Gift{Id: id}
 	ok, err := d.engine.Get(data)
 	if ok && err == nil {
@@ -28,7 +28,7 @@ func (d *GiftDao) Get (id int) *models.Gift {
 	}
 }
 
-func (d *GiftDao) GetAll () []models.Gift  {
+func (d *GiftDao) GetAll() []models.Gift {
 	dataList := make([]models.Gift, 0)
 	err := d.engine.Asc("sys_status").Asc("display_order").Find(&dataList)
 	if err != nil {
@@ -57,7 +57,7 @@ func (d *GiftDao) Update(data *models.Gift, columns []string) error {
 	return err
 }
 
-func (d *GiftDao) Create(data *models.Gift) error  {
+func (d *GiftDao) Create(data *models.Gift) error {
 	_, err := d.engine.Insert(data)
 	return err
 }
@@ -70,12 +70,13 @@ func (d *GiftDao) GetAllUse() []models.Gift {
 	dataList := make([]models.Gift, 0)
 	err := d.engine.
 		Cols("id", "title", "prize_num", "left_num", "prize_code",
-		"prize_time", "img", "display_order", "gtype", "gdata").
-		Desc("gtype").Asc("display_order").
-		Where("prize_num>=?", 0). // 有限定的奖品
-		Where("sys_status=?", 0). // 有效的奖品
-		Where("time_begin<=?", now).   // 时间期内
-		Where("time_end>=?", now).     // 时间期内
+			"prize_time", "img", "display_order", "gtype", "gdata").
+		Desc("gtype").
+		Asc("display_order").
+		Where("prize_num>=?", 0).    // 有限定的奖品
+		Where("sys_status=?", 0).    // 有效的奖品
+		Where("time_begin<=?", now). // 时间期内
+		Where("time_end>=?", now).   // 时间期内
 		Find(&dataList)
 	if err != nil {
 		return nil
@@ -85,11 +86,16 @@ func (d *GiftDao) GetAllUse() []models.Gift {
 }
 
 func (d *GiftDao) IncrLeftNum(id, num int) (int64, error) {
-	r, err := d.engine.Id(id).Incr("left_num", num).Update(&models.Gift{Id:id})
+	r, err := d.engine.Id(id).
+		Incr("left_num", num).
+		Update(&models.Gift{Id: id})
 	return r, err
 }
 
 func (d *GiftDao) DecrLeftNum(id, num int) (int64, error) {
-	r, err := d.engine.Id(id).Decr("left_num", num).Where("left_num>=?",num).Update(&models.Gift{Id:id})
+	r, err := d.engine.Id(id).
+		Decr("left_num", num).
+		Where("left_num>=?", num).
+		Update(&models.Gift{Id: id})
 	return r, err
 }

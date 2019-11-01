@@ -7,4 +7,5 @@ const (
 	NoLogin      CodeType = 1001
 	NowLottery   CodeType = 1002 //正在抽奖
 	NoLotteryNum CodeType = 1003
+	IpLimit      CodeType = 1004
 )

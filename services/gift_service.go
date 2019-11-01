@@ -29,7 +29,7 @@ type giftService struct {
 }
 
 func NewGiftService() GiftService {
-	return &giftService{dao:dao.NewGiftDao(datasource.InstanceDbMaster()),}
+	return &giftService{dao: dao.NewGiftDao(datasource.InstanceDbMaster())}
 }
 
 func (g giftService) GetAll(useCache bool) []models.Gift {
@@ -85,7 +85,11 @@ func (g giftService) GetAllUse(useCache bool) []models.ObjGiftPrize {
 		now := comm.NowUnix()
 		gifts := g.GetAll(true)
 		for _, gift := range gifts {
-			if gift.Id > 0 && gift.SysStatus == 0 && gift.PrizeNum >= 0 && gift.TimeBegin <= now && gift.TimeEnd >= now {
+			if gift.Id > 0 &&
+				gift.SysStatus == 0 &&
+				gift.PrizeNum >= 0 &&
+				gift.TimeBegin <= now &&
+				gift.TimeEnd >= now {
 				list = append(list, gift)
 			}
 		}
@@ -131,7 +135,7 @@ func (g giftService) DecrLeftNum(id, num int) (int64, error) {
 }
 
 // 从缓存中获取全部的奖品
-func (s* giftService) getAllByCache() []models.Gift {
+func (s *giftService) getAllByCache() []models.Gift {
 	key := "allgift"
 	rds := datasource.InstanceCache()
 	rs, err := rds.Do("GET", key)
@@ -186,7 +190,7 @@ func (s* giftService) getAllByCache() []models.Gift {
 }
 
 // 将奖品的数据更新到缓存
-func (s* giftService) setAllByCache(gifts []models.Gift)  {
+func (s *giftService) setAllByCache(gifts []models.Gift) {
 	// 集群模式，redis缓存
 	strValue := ""
 	if len(gifts) > 0 {

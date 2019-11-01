@@ -10,8 +10,6 @@ import (
 	"log"
 	"math"
 	"time"
-
-
 )
 
 const ipFrameSize = 2
@@ -40,25 +38,6 @@ func resetGroupIpList() {
 }
 
 // 今天的IP抽奖次数递增，返回递增后的数值
-func IncrIpLucyNum(strIp string) int64 {
-	ip := comm.Ip4toInt(strIp)
-	i := ip % ipFrameSize
-	// 集群的redis统计数递增
-	return incrServIpLucyNum(i, ip)
-}
-
-func incrServIpLucyNum(i, ip int64) int64 {
-	key := fmt.Sprintf("day_ips_%d", i)
-	cacheObj := datasource.InstanceCache()
-	rs, err := cacheObj.Do("HINCRBY", key, ip, 1)
-	if err != nil {
-		log.Println("ip_day_lucky redis HINCRBY err=", err)
-		return math.MaxInt32
-	} else {
-		return rs.(int64)
-	}
-}
-
 func IncrIpLuckyNum(strIp string) int64 {
 	ip := comm.Ip4toInt(strIp)
 	i := ip % ipFrameSize
