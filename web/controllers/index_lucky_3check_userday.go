@@ -27,7 +27,7 @@ func (api *LuckyApi) checkUserDay(uid int, num int64) bool {
 			}
 			err := userDayService.Update(userDayInfo, nil)
 			if err != nil {
-				log.Println("更新用户每日抽奖次数失败=", err103)
+				log.Println("更新用户每日抽奖次数失败=", err)
 			}
 		}
 	} else {
@@ -42,9 +42,7 @@ func (api *LuckyApi) checkUserDay(uid int, num int64) bool {
 		}
 		err := userDayService.Create(userDayInfo)
 		if err != nil {
-			if err != nil {
-				log.Println("创建用户每日抽奖次数失败=", err103)
-			}
+			log.Println("创建用户每日抽奖次数失败=", err)
 		}
 		utils.InitUserLuckyNum(uid, 1)
 	}

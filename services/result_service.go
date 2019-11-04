@@ -17,17 +17,15 @@ type ResultService interface {
 	Get(id int) *models.Result
 	Delete(id int) error
 	Update(user *models.Result, columns []string) error
-	Create(user *models.Result) error
+	Create(result *models.Result) error
 }
 
 type resultService struct {
 	dao *dao.ResultDao
 }
 
-
-
-func NewResultService() ResultService  {
-	return &resultService{dao:dao.NewResultDao(datasource.InstanceDbMaster()),}
+func NewResultService() ResultService {
+	return &resultService{dao: dao.NewResultDao(datasource.InstanceDbMaster())}
 }
 
 func (r resultService) GetAll(page, size int) []models.Result {
@@ -70,6 +68,6 @@ func (r resultService) Update(user *models.Result, columns []string) error {
 	return r.dao.Update(user, columns)
 }
 
-func (r resultService) Create(user *models.Result) error {
-	return r.dao.Create(user)
+func (r resultService) Create(result *models.Result) error {
+	return r.dao.Create(result)
 }

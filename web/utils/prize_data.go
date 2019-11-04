@@ -17,7 +17,7 @@ func GetGiftPoolNum(id int) int {
 }
 
 // 获取当前奖品池中的奖品数量，从redis中
-func getServerGiftPoolNum(id int) int  {
+func getServerGiftPoolNum(id int) int {
 	key := "gift_pool"
 	cache := datasource.InstanceCache()
 	rs, err := cache.Do("HGET", key, id)
@@ -30,7 +30,7 @@ func getServerGiftPoolNum(id int) int  {
 }
 
 // 重置一个奖品的发奖周期信息 奖品剩余数量也会重新设置为当前奖品数量  奖品的奖品池有效数量则会设置为空 奖品数量、发放周期等设置有修改的时候，也需要重置  【难点】根据发奖周期，重新更新发奖计划
-func ResetGiftPrizeData(gift *models.Gift, service services.GiftService)  {
+func ResetGiftPrizeData(gift *models.Gift, service services.GiftService) {
 	if gift == nil || gift.Id <= 0 {
 		return
 	}
@@ -65,7 +65,7 @@ func ResetGiftPrizeData(gift *models.Gift, service services.GiftService)  {
 	// 每天可以分配到的奖品数量
 	dayPrizeNum := make(map[int]int)
 	// 平均分配，每天分到的奖品数量做分布
-	if dayNum >0 && avgNum > 1 {
+	if dayNum > 0 && avgNum > 1 {
 		for day := 0; day < dayNum; day++ {
 			dayPrizeNum[day] = avgNum
 		}
@@ -83,7 +83,7 @@ func ResetGiftPrizeData(gift *models.Gift, service services.GiftService)  {
 		}
 	}
 	// 每天的map，每小时的map，60分钟的数组，奖品数量
-	prizeData := make(map[int] map[int][60]int)
+	prizeData := make(map[int]map[int][60]int)
 	for day, num := range dayPrizeNum {
 		dayPrizeData := getGiftPrizeDataOneDay(num)
 		prizeData[day] = dayPrizeData
@@ -95,12 +95,12 @@ func ResetGiftPrizeData(gift *models.Gift, service services.GiftService)  {
 		log.Println("prizeData.ResetGiftPrizeData 转换json错误，", err)
 	} else {
 		info := &models.Gift{
-			Id:           gift.Id,
-			LeftNum:      gift.PrizeNum,
-			PrizeData:    string(str),
-			PrizeBegin:   nowTime,
-			PrizeEnd:     nowTime + dayNum * 86400,
-			SysUpdated:   nowTime,
+			Id:         gift.Id,
+			LeftNum:    gift.PrizeNum,
+			PrizeData:  string(str),
+			PrizeBegin: nowTime,
+			PrizeEnd:   nowTime + dayNum*86400,
+			SysUpdated: nowTime,
 		}
 		err := service.Update(info, nil)
 		if err != nil {
@@ -110,10 +110,10 @@ func ResetGiftPrizeData(gift *models.Gift, service services.GiftService)  {
 }
 
 // 清空奖品的发放计划
-func clearGiftPrizeData(gift *models.Gift, service services.GiftService)  {
+func clearGiftPrizeData(gift *models.Gift, service services.GiftService) {
 	info := &models.Gift{
-		Id:           gift.Id,
-		PrizeData:    "",
+		Id:        gift.Id,
+		PrizeData: "",
 	}
 	err := service.Update(info, []string{"PrizeData"})
 	if err != nil {
@@ -140,13 +140,13 @@ func setServiceGiftPool(id, num int) {
 // 将给定的奖品数量分布到这一天的时间内
 // 结构为： [hour][minute]num
 func getGiftPrizeDataOneDay(num int) map[int][60]int {
-	rs := make(map[int] [60]int)
+	rs := make(map[int][60]int)
 	hourData := [24]int{}
 	// 分别将奖品分布到24个小时内
 	if num > 100 {
 		// 奖品数量多的时候，直接按照百分比计算出来
 		for _, h := range conf.PrizeDataRandomDayTime {
-			hourData[h] ++
+			hourData[h]++
 		}
 		for h := 0; h < 24; h++ {
 			d := hourData[h]
@@ -166,7 +166,7 @@ func getGiftPrizeDataOneDay(num int) map[int][60]int {
 	// 将每个小时内的奖品数量分配到60分钟
 	for h, hNum := range hourData {
 		if hNum <= 0 {
-			 continue
+			continue
 		}
 		minuteData := [60]int{}
 		if hNum >= 60 {
@@ -198,7 +198,7 @@ func formatGiftPrizeData(nowTime, dayNum int, prizeData map[int]map[int][60]int)
 		if !ok {
 			continue
 		}
-		dayTime := nowTime + dn * 86400
+		dayTime := nowTime + dn*86400
 		// 处理周期内，每小时的计划
 		for hn := 0; hn < 24; hn++ {
 			hourData, ok := dayData[(hn*nowHour)%24]
@@ -219,4 +219,36 @@ func formatGiftPrizeData(nowTime, dayNum int, prizeData map[int]map[int][60]int)
 		}
 	}
 	return rs
+}
+
+// 发奖，指定的奖品是否还可以发出来奖品
+func PrizeGift(id int) bool {
+	ok := false
+	ok = prizeServerGift(id)
+	if ok {
+		giftService := services.NewGiftService()
+		rows, err := giftService.DecrLeftNum(id, 1)
+		if rows < 1 || err != nil {
+			log.Println("数据库奖品数量-1错误,", err)
+			return false
+		}
+	}
+	return ok
+}
+
+// 发奖，redis缓存
+func prizeServerGift(id int) bool {
+	key := "gift_pool"
+	cacheObj := datasource.InstanceCache()
+	rs, err := cacheObj.Do("HINCRBY", key, id, -1)
+	if err != nil {
+		log.Println("redis中奖品数量-1错误,", err)
+		return false
+	}
+	num := comm.GetInt64(rs, -1)
+	if num >= 0 {
+		return true
+	} else {
+		return false
+	}
 }
