@@ -9,11 +9,11 @@ type BlackIpDao struct {
 	engine *xorm.Engine
 }
 
-func NewBlackIpDao(engine *xorm.Engine) *BlackIpDao  {
-	return &BlackIpDao{engine:engine}
+func NewBlackIpDao(engine *xorm.Engine) *BlackIpDao {
+	return &BlackIpDao{engine: engine}
 }
 
-func (d *BlackIpDao) Get(id int) *models.Blackip  {
+func (d *BlackIpDao) Get(id int) *models.Blackip {
 	data := &models.Blackip{Id: id}
 	ok, err := d.engine.Get(data)
 	if ok && err == nil {
@@ -34,7 +34,7 @@ func (d *BlackIpDao) GetAll(page, size int) []models.Blackip {
 	}
 }
 
-func (d* BlackIpDao) CountAll() int64 {
+func (d *BlackIpDao) CountAll() int64 {
 	num, err := d.engine.Count(&models.Blackip{})
 	if err != nil {
 		return 0
@@ -42,7 +42,7 @@ func (d* BlackIpDao) CountAll() int64 {
 	return num
 }
 
-func (d* BlackIpDao) Search(ip string) []models.Blackip {
+func (d *BlackIpDao) Search(ip string) []models.Blackip {
 	dataList := make([]models.Blackip, 0)
 	err := d.engine.Where("ip=?", ip).Desc("id").Find(&dataList)
 	if err != nil {
@@ -52,20 +52,20 @@ func (d* BlackIpDao) Search(ip string) []models.Blackip {
 	}
 }
 
-func (d *BlackIpDao) Create (data *models.Blackip) error {
+func (d *BlackIpDao) Create(data *models.Blackip) error {
 	_, err := d.engine.Insert(data)
 	return err
 }
 
-func (d *BlackIpDao) Update (data *models.Blackip, columns []string) error {
+func (d *BlackIpDao) Update(data *models.Blackip, columns []string) error {
 	_, err := d.engine.Id(data.Id).MustCols(columns...).Update(data)
 	return err
 }
 
-func (d *BlackIpDao) GetByIp (ip string) *models.Blackip {
+func (d *BlackIpDao) GetByIp(ip string) *models.Blackip {
 	dataList := make([]models.Blackip, 0)
-	err := d.engine.Where("ip=?",ip).Desc("id").Limit(1).Find(&dataList)
-	if err != nil {
+	err := d.engine.Where("ip=?", ip).Desc("id").Limit(1).Find(&dataList)
+	if err != nil || len(dataList) == 0 {
 		return nil
 	} else {
 		return &dataList[0]

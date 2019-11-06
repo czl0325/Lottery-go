@@ -7,7 +7,7 @@ type Gift struct {
 	LeftNum      int    `xorm:"not null default 0 comment('剩余数量') INT(10)"`
 	PrizeCode    string `xorm:"not null comment('0-9999表示100%，0-0表示万分之一的中奖概率') VARCHAR(255)"`
 	PrizeTime    int    `xorm:"not null default 0 comment('发奖周期，D天') INT(10)"`
-	Img          string `xorm:"comment('奖品图片') VARCHAR(255)"`
+	Img          string `xorm:"comment('奖品图片') TEXT(0)"`
 	DisplayOrder int    `xorm:"comment('位置序号，小的排在前面') INT(255)"`
 	Gtype        int    `xorm:"not null comment('奖品类型，0 虚拟币，1 虚拟券，2 实物-小奖，3 实物-大奖'') INT(10)"`
 	Gdata        string `xorm:"comment('扩展数据，如：虚拟币数量') TEXT"`

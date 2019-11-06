@@ -6,6 +6,7 @@ import (
 	"Lottery-go/models"
 	"Lottery-go/services"
 	"Lottery-go/web/utils"
+	ct "github.com/daviddengcn/go-colortext"
 	"log"
 	"time"
 )
@@ -58,6 +59,9 @@ func (api *LuckyApi) luckyDo(uid int, username, ip string) (int, string, *models
 
 	// 7 获得抽奖编码
 	prizeCode := comm.Random(10000)
+	ct.Foreground(ct.Blue, true)
+	log.Println("抽奖号码=", prizeCode)
+	ct.ResetColor()
 
 	// 8 匹配奖品是否中奖
 	prizeGift := api.prize(prizeCode, limitBlack)
@@ -66,15 +70,15 @@ func (api *LuckyApi) luckyDo(uid int, username, ip string) (int, string, *models
 	}
 
 	// 9 有限制奖品发放
-	if prizeGift.Id > 0 {
-		if utils.GetGiftPoolNum(prizeGift.Id) <= 0 {
-			return 202, "很遗憾，没有中奖，请下次再试", nil
-		}
-		ok := utils.PrizeGift(prizeGift.Id)
-		if ok == false {
-			return 203, "很遗憾，没有中奖，请下次再试", nil
-		}
-	}
+	//if prizeGift.Id > 0 {
+	//	if utils.GetGiftPoolNum(prizeGift.Id) <= 0 {
+	//		return 202, "很遗憾，没有中奖，请下次再试", nil
+	//	}
+	//	ok := utils.PrizeGift(prizeGift.Id)
+	//	if ok == false {
+	//		return 203, "很遗憾，没有中奖，请下次再试", nil
+	//	}
+	//}
 
 	//10 不同编码的优惠券的发放
 
@@ -95,6 +99,10 @@ func (api *LuckyApi) luckyDo(uid int, username, ip string) (int, string, *models
 	if err != nil {
 		log.Println("保存中奖纪录失败,", err)
 		return 209, "很遗憾，没有中奖，请下次再试", nil
+	}
+	//12 如果获得了实物大奖，需要将用户、IP设置成黑名单一段时间
+	if prizeGift.Gtype == conf.GtypeGiftLarge {
+		api.prizeLarge(ip, uid, username, blackUser, blackInfo)
 	}
 	return 0, "成功抽到奖品", prizeGift
 }
